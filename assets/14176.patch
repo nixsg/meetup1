@@ -1,0 +1,24 @@
+From 8d1660ce1498343df366b40c4821cf0cc7b0640c Mon Sep 17 00:00:00 2001
+From: Peter Hoeg <peter@hoeg.com>
+Date: Thu, 24 Mar 2016 22:08:40 +0800
+Subject: [PATCH] virtualbox service: fix use of deprecated option names
+
+---
+ nixos/modules/programs/virtualbox.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nixos/modules/programs/virtualbox.nix b/nixos/modules/programs/virtualbox.nix
+index a00b1e5..be96cf2 100644
+--- a/nixos/modules/programs/virtualbox.nix
++++ b/nixos/modules/programs/virtualbox.nix
+@@ -1,8 +1,8 @@
+ let
+   msg = "Importing <nixpkgs/nixos/modules/programs/virtualbox.nix> is "
+-      + "deprecated, please use `services.virtualboxHost.enable = true' "
++      + "deprecated, please use `virtualisation.virtualbox.host.enable = true' "
+       + "instead.";
+ in {
+   config.warnings = [ msg ];
+-  config.services.virtualboxHost.enable = true;
++  config.virtualisation.virtualbox.host.enable = true;
+ }

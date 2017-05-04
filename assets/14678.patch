@@ -1,0 +1,27 @@
+From 318bfdfdd771d659a0bdd30d2133b434e0cf8854 Mon Sep 17 00:00:00 2001
+From: Peter Hoeg <peter@hoeg.com>
+Date: Thu, 14 Apr 2016 10:37:22 +0800
+Subject: [PATCH] syncthing: 0.12.19 -> 0.12.22
+
+---
+ pkgs/top-level/go-packages.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/top-level/go-packages.nix b/pkgs/top-level/go-packages.nix
+index bc87da0..fbabba6 100644
+--- a/pkgs/top-level/go-packages.nix
++++ b/pkgs/top-level/go-packages.nix
+@@ -3498,11 +3498,11 @@ let
+   };
+ 
+   syncthing = buildFromGitHub rec {
+-    version = "0.12.19";
++    version = "0.12.22";
+     rev = "v${version}";
+     owner = "syncthing";
+     repo = "syncthing";
+-    sha256 = "11ij8whaqrrzriavxa08jpsmbd1zkc2qxsni1nbgszw2hymmv38g";
++    sha256 = "1pycmb5cwkp21p11rj6lbrqr66yiffi23zk5laas3p581ljdg5vj";
+     buildFlags = [ "-tags noupgrade,release" ];
+     disabled = isGo14;
+     buildInputs = [

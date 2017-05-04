@@ -1,0 +1,184 @@
+* Email to attendees                                                            :noexport:
+
+Hi,
+
+tonight is the first Singapore Nix/NixOS meetup.
+
+If you are bringing a laptop along to try things out yourself, you may want to go to https://nixos.org/nixos/download.html and download the following files:
+
+ - graphical installation CD
+ - minimal installation CD
+
+And we obviously need a VM manager for this - VirtualBox should do the trick.
+
+We have plenty of space at Spacemob so feel free to bring extra people along. If
+you haven't signed up yet, that's fine too - we will be able to squeeze you in.
+
+This is what we are going to cover tonight:
+
+- *brief* outline of the various parts of the eco-system
+- how do we install nix and nixos and *then* what
+- developing on NixOS
+- contributing code
+- we will fix a bug
+
+When you enter the building, you need to approach the front desk to sign in
+(tell them you're going to Spacemob). After they let you in, go to the 2nd floor
+and proceed down the hall. It's about 30 meters down on the right.
+
+If you have any problems finding the place, give me a call at 9199 4244.
+
+* Intro
+
+#+ATTR_REVEAL: :frag (roll-in)
+- Hi, I'm Peter!
+- I am doing this to build a community
+- (and our documentation sucks)
+- Some experience running NixOS in production (dogfooding)
+- Not an expert
+- I made lots of mistakes
+- Fortunately most mistakes were done before I got commit rights
+
+* What are we going to do today
+
+- *brief* outline of the various parts of the eco-system
+- how do we install nix and nixos and *then* what
+- developing on NixOS
+- contributing code
+- *not going* to fix a bug
+
+* Why so excited?
+file:./assets/excited.png
+** Life is too short for this
+
+file:./assets/fail_windows.png
+** and this...
+file:./assets/fail_ansible.png
+** About you guys
+** How familiar are you
+
+file:./assets/nix_familiar.png
+
+** How do you run nix
+file:./assets/nix_run.png
+** Why is it cool
+
+#+ATTR_REVEAL: :frag (roll-in)
+- There is ONE language to learn
+- Everything is programmable
+- We point NIX_PATH at the same commit, we get the same output - EVERY time
+- It is so easy to carry out your own experiments
+  - when was the last time someone enjoyed packaging something for Debian
+- It is the easiest Linux distribution to contribute to
+- Forget about RVM/rbenv/chruby for ruby, virtualenv for python
+- You can turn anything into a container
+- You can mix and match stable/unstable
+
+* The ecosystem
+
+#+ATTR_REVEAL: :frag (roll-in)
+- nix - the *language*
+- nix - the *package manager*
+- nixpkgs - the *repository* of packages
+- nixos - the *linux distribution* built on the items above
+- nixops - the *deployment* tool
+
+** The language
+
+#+INCLUDE: "~/src/active/nixpkgs/pkgs/applications/misc/hello/default.nix" example
+
+** The package manager
+
+#+BEGIN_SRC sh
+$ which hello                                                                                                                                                                                                       ~
+hello not found
+
+$ nix-env -i hello                                                                                                                                                                                                  ~
+installing ‘hello-2.10’
+these paths will be fetched (0.04 MiB download, 0.19 MiB unpacked):
+  /nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10
+fetching path ‘/nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10’...
+
+Downloading ‘https://cache.nixos.org/nar/1gjcfvzw4s8bcsna5m600cj37xgq7pf52a4bipbd4pf181c193kq.nar.xz’ (signed by ‘cache.nixos.org-1’) to ‘/nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10’...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 40296  100 40296    0     0  32630      0  0:00:01  0:00:01 --:--:-- 32628
+
+building path(s) ‘/nix/store/qjpv89b04dm7f1j71pfdsvdv3rs4c0zn-user-environment’
+created 18 symlinks in user environment
+
+$ which hello                                                                                                                                                                                                       ~
+/home/peter/.nix-profile/bin/hello
+
+$ hello
+Hello, world!
+
+$ nix-env -e hello                                                                                                                                                                                                  ~
+uninstalling ‘hello-2.10’
+building path(s) ‘/nix/store/gm9dadwwhg1ssrcwpcghglqfk8h5s7b3-user-environment’
+created 14 symlinks in user environment
+
+$ which hello                                                                                                                                                                                                       ~
+hello not found
+#+END_SRC
+
+** The repository
+
+#+INCLUDE: "~/src/active/nixpkgs/pkgs/applications/misc/hello/default.nix" example
+
+** The linux distribution
+We will get to this shortly.
+** The deployment tool
+We will cover this in a later session.
+
+** Terminology
+- channel :: release
+- derivation :: package
+- generation :: a set of packages and configuration
+- NIX_PATH :: this points to a commit
+
+* Installing NixOS
+Demo time!
+* Developing on NixOS
+* Contributing code
+
+Some of the rules of contributing
+
+** Don't be afraid to break stuff
+
+#+ATTR_REVEAL: :frag (roll-in)
+- (at least not on purpose)
+- I have broken the build
+- (twice)
+- I pushed about 120 local branches to the main repository
+
+** Don't be afraid to ask
+
+** Just get it out there
+
+#+INCLUDE: assets/14176.patch src diff
+
+** Another example
+
+#+INCLUDE: assets/14678.patch src diff
+
+* org-mode                                                                      :noexport:
+#+TITLE: Nix/NixOS meetup #1
+#+EMAIL:
+#+DATE: 2017-05-04
+#+AUTHOR:
+#+PROPERTY: NO_ID t
+#+STARTUP: inlineimages
+#+STARTUP: overview
+#  +BIND: org-html-indent nil
+#+REVEAL_THEME: solarized
+#+OPTIONS: num:nil timestamp:nil toc:nil
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:t reveal_control:t
+#+OPTIONS: reveal_mathjax:t reveal_rolling_links:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_single_file:t
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+REVEAL_MARGIN: 0.2
+#+REVEAL_MIN_SCALE: 0.1
+#+REVEAL_MAX_SCALE: 1.0
+#+REVEAL_TRANS: none
+#+REVEAL_HLEVEL: 2
