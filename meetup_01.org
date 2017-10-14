@@ -28,6 +28,12 @@ and proceed down the hall. It's about 30 meters down on the right.
 
 If you have any problems finding the place, give me a call at 9199 4244.
 
+* Singapore Nix/NixOS
+
+wifi: Spacemob_Ascent
+
+pass: @scent@2017
+
 * Intro
 
 #+ATTR_REVEAL: :frag (roll-in)
@@ -162,10 +168,21 @@ Some of the rules of contributing
 
 #+INCLUDE: assets/14678.patch src diff
 
+* What happens next
+** You are welcome to reach out to me
+@peterhoeg in most places
+** The community
+- github.com/NixOS
+- #nixos on IRC
+- Nix on matrix
+- there's probably a slack channel
+- nix-dev mailing list
+* Next meetup
+Anyone wants to share?
 * org-mode                                                                      :noexport:
 #+TITLE: Nix/NixOS meetup #1
 #+EMAIL:
-#+DATE: 2017-05-04
+#+DATE:
 #+AUTHOR:
 #+PROPERTY: NO_ID t
 #+STARTUP: inlineimages
