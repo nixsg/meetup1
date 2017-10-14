@@ -1,0 +1,29 @@
+$ nixops deploy -d speartail
+app3......> sending Route53 DNS: app3.speartail.net A 13.228.215.41
+building all machine configurations...
+these derivations will be built:
+  /nix/store/c8pnwd8sw5zgchql4cm4rb0fh9s5z6b9-checks.json.drv
+  /nix/store/hykis326rbn0dbxpci01jrl75hv4mfx5-unit-sensu-server.service.drv
+  /nix/store/y17w5ljlj2schg2l9640z3yx8vwb5gj5-unit-sensu-api.service.drv
+  /nix/store/bylpqm4wn5mdrbjrgwsh3i49wim9yg5f-system-units.drv
+  /nix/store/p9il4zlskcalsck8jyiia5vpvwy1063i-etc.drv
+  /nix/store/b5gryghm0zlqc2lh8jdlzi1lxpjzmqr6-nixos-system-app3-17.09pre-git.drv
+  /nix/store/6z17g18pz6zqr55p476f3d7yg0vb8c1v-nixops-machines.drv
+building path(s) ‘/nix/store/67s18lcnpb80jxdxhkdd15c1ki7ry2hx-checks.json’
+building path(s) ‘/nix/store/7klhk904rl216wcnzdjz6nr0fq3c5biy-unit-sensu-api.service’
+building path(s) ‘/nix/store/0024a9ccl58fh4d9agdia0225yga8nf2-unit-sensu-server.service’
+building path(s) ‘/nix/store/70cb4ppprrfg8pal8rd3zzgjg9bxi83z-system-units’
+building path(s) ‘/nix/store/0qaa9h69pw4ybdi5mcqgx99ciizxvlwj-etc’
+building path(s) ‘/nix/store/s9igj9qrcwi5xhgvwnzgw6pzglz63zgf-nixos-system-app3-17.09pre-git’
+building path(s) ‘/nix/store/p4xhmv2pkqjcasgaa59xxvsv1gk419bx-nixops-machines’
+app3......> copying closure...
+app3......> copying 6 missing paths (0.23 MiB) to ‘root@13.228.215.41’...
+speartail> closures copied successfully
+app3......> updating GRUB 2 menu...
+app3......> stopping the following units: sensu-api.service, sensu-server.service
+app3......> activating the configuration...
+app3......> setting up /etc...
+app3......> setting up tmpfiles
+app3......> starting the following units: sensu-api.service, sensu-server.service
+app3......> activation finished successfully
+speartail> deployment finished successfully

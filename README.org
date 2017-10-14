@@ -3,3 +3,7 @@
 A list of presentations from our meetup.
 
 - [[file:./meetup_01.org][Meetup #1]]
+
+* Other talks
+
+ - [[file:nus_hackers.org][NUS Hackers]]

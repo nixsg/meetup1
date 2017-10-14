@@ -1,0 +1,273 @@
+* Intro
+
+#+ATTR_REVEAL: :frag (roll-in)
+- Hi, I'm Peter!
+- I work for Speartail, a (very) small Managed Services Provider in Singapore
+- We run NixOS in production (dog-fooding)
+- Fortunately most mistakes were done before I got commit rights
+- Thanks to Maarten Hoogerndoorn and container-solutions.com for some of the images
+- My slide-fu is very weak!
+
+* What is this talk *not* about
+
+Functional Programming
+
+#+ATTR_REVEAL: :frag (roll-in)
+- Question: What are the real-life use cases for this?
+- Answer: That depends on your definition of reality.
+
+* What are we going to do today
+
+#+ATTR_REVEAL: :frag (roll-in)
+- What are (some of) the problems we are seeing today when building/deploying computer systems?
+- Outline of the various parts of the eco-system
+- How do we use NixOS solve real problems?
+
+* What are the big issues of today?
+
+#+ATTR_REVEAL: :frag (roll-in)
+- [[file:./assets/trump_kim.jpg]]
+
+* 3 main items
+
+- shared state
+- impurities
+- mutable data
+
+* How do we build systems
+
+[[file:./assets/ccms-build-model-1.png]]
+
+* How do we deploy systems
+
+file:./assets/ccms-deployment-model-1.png
+
+* What does that mean?
+
+Building/deploying is really the same thing
+
+#+ATTR_REVEAL: :frag (roll-in)
+- We keep modifying/mutating until our system is in the wanted state.
+- We then *hope* we can get to the same place by repeating it.
+
+* Closer to home
+
+file:./assets/fail_windows.png
+
+* Using ansible
+
+file:./assets/fail_ansible.png
+
+* What does that REALLY mean?
+
+#+ATTR_REVEAL: :frag (roll-in)
+Question: How do you automate the provisioning of infrastructure and manage the changes to systems and machines to allow you to deploy and run your software in an automated manner?
+Answer: You could do *docker* containers on *terraform* provisioned infrastructure and *ansible* managed machines.
+
+* Life is (too) short
+
+And the real question is:
+
+How do you declaratively define systems and handle changes in a safe, atomic,
+reproducible manner that allows rollbacks?
+
+* Or the even shorter version
+
+If stuff breaks when you change something, how do we do changes safely?
+
+* NixOS
+
+- This is *not* JustAnotherLinuxDistro(tm).
+- It is a fundamentally different way to approach computer systems.
+
+#+ATTR_REVEAL: :frag (roll-in)
+- nix - an FP *language*
+- nix - the *package manager*
+- nixpkgs - the *repository* of packages
+- NixOS - the *linux distribution* built on the items above
+- nixops - the *deployment* tool
+
+** The language
+
+#+INCLUDE: ./assets/hello.nix src nix
+
+** The package manager
+
+#+BEGIN_EXAMPLE
+$ which hello                                                                                                                                                                                                       ~
+hello not found
+
+$ nix-env -i hello                                                                                                                                                                                                  ~
+installing ‘hello-2.10’
+these paths will be fetched (0.04 MiB download, 0.19 MiB unpacked):
+  /nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10
+fetching path ‘/nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10’...
+
+Downloading ‘https://cache.nixos.org/nar/1gjcfvzw4s8bcsna5m600cj37xgq7pf52a4bipbd4pf181c193kq.nar.xz’ (signed by ‘cache.nixos.org-1’) to ‘/nix/store/rkvwvi007k7w8lp4cc0n10yhlz5xjfmk-hello-2.10’...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 40296  100 40296    0     0  32630      0  0:00:01  0:00:01 --:--:-- 32628
+
+building path(s) ‘/nix/store/qjpv89b04dm7f1j71pfdsvdv3rs4c0zn-user-environment’
+created 18 symlinks in user environment
+
+$ which hello                                                                                                                                                                                                       ~
+/home/peter/.nix-profile/bin/hello
+
+$ hello
+Hello, world!
+
+$ nix-env -e hello                                                                                                                                                                                                  ~
+uninstalling ‘hello-2.10’
+building path(s) ‘/nix/store/gm9dadwwhg1ssrcwpcghglqfk8h5s7b3-user-environment’
+created 14 symlinks in user environment
+
+$ which hello                                                                                                                                                                                                       ~
+hello not found
+#+END_EXAMPLE
+
+** The repository
+
+#+INCLUDE: ./assets/hello.nix src nix
+
+** The linux distribution
+
+#+INCLUDE: ./assets/sddm.nix src nix
+
+** The deployment tool
+
+#+INCLUDE: ./assets/network.nix src nix
+
+* Where is the functional aspect
+
+#+ATTR_REVEAL: :frag (roll-in)
+- Pointed at the same commit in the repository
+- We now have the same input
+- When evaluated by the same expressions
+- Will give us the same output
+
+[file:./assets/nix-build.png]
+
+** Deploying
+
+[file:./assets/nix-build.png]
+
+* How does it work
+
+#+INCLUDE: ./assets/deploy.txt src sh
+
+** Let's break it down
+
+#+ATTR_REVEAL: :frag (roll-in)
+1. Expression is evaluated
+   1. Derivations (packages) are built
+   2. Dependencies are downloaded
+2. *Changed* closures copied to remote server(s) (or downloaded over there)
+3. New configuration is activated (switching one symlink)
+
+** Compared to ansible
+
+file:./assets/fail_ansible.png
+
+* Why so excited?
+
+** There is ONE language to learn
+
+nix vs
+
+#+ATTR_REVEAL: :frag (roll-in)
+ - ruby for your application deployment via capistrano
+ - yaml for ansible
+ - jinja templates for your config files
+ - hcl for the infrastructure (terraform)
+ - shell scripts to tie it all together
+
+** Everything is programmable
+** It is reproducible
+
+We point to the same commit, we get the same output - EVERY time.
+
+** Reproducible build - docker style
+
+#+INCLUDE: ./assets/Dockerfile src sh
+
+** Others
+#+ATTR_REVEAL: :frag (roll-in)
+- It is so easy to carry out your own experiments
+  - When was the last time someone enjoyed packaging something for Debian?
+- It is the easiest Linux distribution to contribute to
+- Forget about RVM/rbenv/chruby for ruby, virtualenv for python
+- You can turn anything into a container
+- You can mix and match versions, configuration flags, options, stable and unstable
+
+* How are we using this?
+** Monitoring appliances
+
+#+INCLUDE: ./assets/machine.nix src nix
+
+*** Monitoring
+
+If it works for one customer, it will work for others.
+
+** Internally developed software (own use or customers)
+
+#+INCLUDE: ./assets/application.nix src nix
+
+** Running all internal services on
+
+- Physical hardware
+- AWS
+- Azure
+- other hosting providers
+
+* Is it safe to try?
+* What happens next
+** You are welcome to reach out to me
+@peterhoeg in most places
+** Please get involved
+
+Some of the rules of contributing
+
+*** Don't be afraid to break stuff
+
+#+ATTR_REVEAL: :frag (roll-in)
+- (at least not on purpose)
+- I have broken the build
+- (twice)
+- I pushed about 120 local branches to the main repository
+
+*** Don't be afraid to ask
+*** Just get it out there
+
+#+INCLUDE: assets/14176.patch src diff
+
+*** Another example
+
+#+INCLUDE: assets/14678.patch src diff
+
+** The community
+- github.com/NixOS
+- #nixos on IRC
+- Nix on matrix
+- there's probably a slack channel
+- nix-dev mailing list
+* org-mode                                                                      :noexport:
+#+TITLE: Functional systems in a non-functional world
+#+EMAIL:
+#+DATE:
+#+AUTHOR:
+#+PROPERTY: NO_ID t
+#+STARTUP: inlineimages
+#+STARTUP: overview
+#  +BIND: org-html-indent nil
+#+REVEAL_THEME: black
+#+OPTIONS: num:nil timestamp:nil toc:nil
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:t reveal_control:t
+#+OPTIONS: reveal_mathjax:t reveal_rolling_links:t reveal_keyboard:t reveal_overview:t
+#+OPTIONS: reveal_single_file:t
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+REVEAL_MARGIN: 0.2
+#+REVEAL_MIN_SCALE: 0.1
+#+REVEAL_MAX_SCALE: 1.0
+#+REVEAL_TRANS: none
+#+REVEAL_HLEVEL: 2
